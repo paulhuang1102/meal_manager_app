@@ -1,12 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../injection_container.dart';
 import '../../auth/presentation/bloc/auth_bloc.dart';
 import '../../auth/presentation/bloc/auth_event.dart';
 import '../../auth/presentation/bloc/auth_state.dart';
+import '../../person/presentation/bloc/person_bloc.dart';
+import '../../person/presentation/bloc/person_event.dart';
+import '../../person/presentation/widgets/add_person_floating_button.dart';
+import '../../person/presentation/widgets/person_list.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => sl<PersonBloc>()..add(PersonLoadEvent()),
+      child: const _HomePageContent(),
+    );
+  }
+}
+
+class _HomePageContent extends StatelessWidget {
+  const _HomePageContent();
 
   @override
   Widget build(BuildContext context) {
@@ -23,47 +40,8 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocBuilder<AuthBloc, AuthState>(
-        builder: (context, state) {
-          if (state is AuthAuthenticated) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.check_circle_outline,
-                    size: 80,
-                    color: Colors.green,
-                  ),
-                  const SizedBox(height: 24),
-                  Text(
-                    'Welcome, ${state.user.username}!',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'You are successfully logged in.',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  const SizedBox(height: 32),
-                  const Divider(),
-                  const SizedBox(height: 16),
-                  const Text(
-                    '// Future: PersonListWidget will be displayed here',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      ),
+      body: PresonList(),
+      floatingActionButton: const AddPersonFloatingButton(),
     );
   }
 }

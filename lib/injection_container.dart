@@ -8,6 +8,15 @@ import 'features/auth/domain/usecases/get_current_user.dart';
 import 'features/auth/domain/usecases/login.dart';
 import 'features/auth/domain/usecases/logout.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
+import 'features/person/data/datasources/person_local_data_source.dart';
+import 'features/person/data/repositories/person_repository_impl.dart';
+import 'features/person/domain/repositories/person_repository.dart';
+import 'features/person/domain/usecases/add_person.dart';
+import 'features/person/domain/usecases/delete_person.dart';
+import 'features/person/domain/usecases/get_persons.dart';
+import 'features/person/domain/usecases/search_persons.dart';
+import 'features/person/domain/usecases/update_person.dart';
+import 'features/person/presentation/bloc/person_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -37,6 +46,34 @@ Future<void> init() async {
     () => AuthLocalDataSourceImpl(sharedPreferences: sl()),
   );
 
-  // Person
-  // Meal Order
+  //! Features - Person
+  // Bloc
+  sl.registerFactory(
+    () => PersonBloc(
+      getPersons: sl(),
+      addPerson: sl(),
+      updatePerson: sl(),
+      deletePerson: sl(),
+      searchPersons: sl(),
+    ),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => GetPersons(sl()));
+  sl.registerLazySingleton(() => AddPerson(sl()));
+  sl.registerLazySingleton(() => UpdatePerson(sl()));
+  sl.registerLazySingleton(() => DeletePerson(sl()));
+  sl.registerLazySingleton(() => SearchPersons(sl()));
+
+  // Repository
+  sl.registerLazySingleton<PersonRepository>(
+    () => PersonRepositoryImpl(localDataSource: sl()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<PersonLocalDataSource>(
+    () => PersonLocalDataSourceImpl(sharedPreferences: sl()),
+  );
+  
+   // Meal Order
 }
