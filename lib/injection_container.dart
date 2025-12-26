@@ -71,7 +71,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetPersons(sl()));
   sl.registerLazySingleton(() => AddPerson(sl()));
   sl.registerLazySingleton(() => UpdatePerson(sl()));
-  sl.registerLazySingleton(() => DeletePerson(sl()));
+  sl.registerLazySingleton(() => DeletePerson(
+        personRepository: sl(),
+        mealOrderRepository: sl(),
+      ));
   sl.registerLazySingleton(() => SearchPersons(sl()));
 
   // Repository

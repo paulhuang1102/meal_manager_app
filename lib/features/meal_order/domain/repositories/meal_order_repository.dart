@@ -7,5 +7,6 @@ abstract class MealOrderRepository {
   Future<Either<Failure, List<MealOrder>>> getMealOrders();
   Future<Either<Failure, void>> addMealOrder(MealOrder order);
   Future<Either<Failure, void>> deleteMealOrder(String id);
+  Future<Either<Failure, void>> deleteMealOrdersByPersonId(String personId);
   Future<Either<Failure, MealStatistics>> getStatistics();
 }

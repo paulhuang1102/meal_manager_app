@@ -44,6 +44,16 @@ class MealOrderRepositoryImpl implements MealOrderRepository {
   }
 
   @override
+  Future<Either<Failure, void>> deleteMealOrdersByPersonId(String personId) async {
+    try {
+      await localDataSource.deleteMealOrdersByPersonId(personId);
+      return const Right(null);
+    } on CacheException catch (e) {
+      return Left(CacheFailure(e.message));
+    }
+  }
+
+  @override
   Future<Either<Failure, MealStatistics>> getStatistics() async {
     try {
       final statistics = await localDataSource.getStatistics();

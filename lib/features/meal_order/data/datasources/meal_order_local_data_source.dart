@@ -10,6 +10,7 @@ abstract class MealOrderLocalDataSource {
   Future<List<MealOrderModel>> getMealOrders();
   Future<void> addMealOrder(MealOrderModel order);
   Future<void> deleteMealOrder(String id);
+  Future<void> deleteMealOrdersByPersonId(String personId);
   Future<MealStatistics> getStatistics();
 }
 
@@ -53,6 +54,18 @@ class MealOrderLocalDataSourceImpl implements MealOrderLocalDataSource {
       await sharedPreferences.setString(StorageKeys.mealOrders, jsonString);
     } catch (e) {
       throw CacheException('Failed to delete meal order');
+    }
+  }
+
+  @override
+  Future<void> deleteMealOrdersByPersonId(String personId) async {
+    try {
+      final orders = await getMealOrders();
+      orders.removeWhere((order) => order.personId == personId);
+      final jsonString = json.encode(orders.map((o) => o.toJson()).toList());
+      await sharedPreferences.setString(StorageKeys.mealOrders, jsonString);
+    } catch (e) {
+      throw CacheException('Failed to delete meal orders by person id');
     }
   }
 

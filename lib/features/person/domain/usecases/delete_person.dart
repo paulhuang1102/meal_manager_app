@@ -3,15 +3,27 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../repositories/person_repository.dart';
+import '../../../meal_order/domain/repositories/meal_order_repository.dart';
 
 class DeletePerson implements UseCase<void, DeletePersonParams> {
-  final PersonRepository repository;
+  final PersonRepository personRepository;
+  final MealOrderRepository mealOrderRepository;
 
-  DeletePerson(this.repository);
+  DeletePerson({
+    required this.personRepository,
+    required this.mealOrderRepository,
+  });
 
   @override
   Future<Either<Failure, void>> call(DeletePersonParams params) async {
-    return await repository.deletePerson(params.id);
+    final deleteMealOrdersResult =
+        await mealOrderRepository.deleteMealOrdersByPersonId(params.id);
+
+    if (deleteMealOrdersResult.isLeft()) {
+      return deleteMealOrdersResult;
+    }
+
+    return await personRepository.deletePerson(params.id);
   }
 }
 
