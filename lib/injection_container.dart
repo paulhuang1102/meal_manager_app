@@ -17,6 +17,15 @@ import 'features/person/domain/usecases/get_persons.dart';
 import 'features/person/domain/usecases/search_persons.dart';
 import 'features/person/domain/usecases/update_person.dart';
 import 'features/person/presentation/bloc/person_bloc.dart';
+import 'features/meal_order/data/datasources/meal_order_local_data_source.dart';
+import 'features/meal_order/data/repositories/meal_order_repository_impl.dart';
+import 'features/meal_order/domain/repositories/meal_order_repository.dart';
+import 'features/meal_order/domain/usecases/add_meal_order.dart';
+import 'features/meal_order/domain/usecases/delete_meal_order.dart';
+import 'features/meal_order/domain/usecases/get_meal_orders.dart';
+import 'features/meal_order/domain/usecases/get_meal_statistics.dart';
+import 'features/meal_order/presentation/bloc/meal_order_bloc.dart';
+import 'features/meal_order/presentation/bloc/meal_statistic_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -74,6 +83,34 @@ Future<void> init() async {
   sl.registerLazySingleton<PersonLocalDataSource>(
     () => PersonLocalDataSourceImpl(sharedPreferences: sl()),
   );
-  
-   // Meal Order
+
+  //! Features - Meal Order
+  // Bloc
+  sl.registerFactory(
+    () => MealOrderBloc(
+      getMealOrders: sl(),
+      addMealOrder: sl(),
+      deleteMealOrder: sl(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => MealStatisticBloc(getStatistics: sl()),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => GetMealOrders(sl()));
+  sl.registerLazySingleton(() => AddMealOrder(sl()));
+  sl.registerLazySingleton(() => DeleteMealOrder(sl()));
+  sl.registerLazySingleton(() => GetStatistics(sl()));
+
+  // Repository
+  sl.registerLazySingleton<MealOrderRepository>(
+    () => MealOrderRepositoryImpl(localDataSource: sl()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<MealOrderLocalDataSource>(
+    () => MealOrderLocalDataSourceImpl(sharedPreferences: sl()),
+  );
 }
