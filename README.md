@@ -1,16 +1,43 @@
-# meal_manager
+# Meal Manager
 
-A new Flutter project.
+A Flutter application for managing meal orders with person management and statistics tracking.
+
+## Requirements
+
+- Flutter 3.38.5
+- Dart 3.10.4
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. Install dependencies:
+```bash
+flutter pub get
+```
 
-A few resources to get you started if this is your first Flutter project:
+2. Run the application:
+```bash
+flutter run
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Login Credentials
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **Username:** `admin`
+- **Password:** `admin`
+
+## Features
+
+- User authentication
+- Person management (Create, Read, Update, Delete)
+- Advanced person filtering (by name, age range, birth month)
+- Meal ordering system (breakfast, lunch, dinner)
+- Real-time meal statistics
+
+## Architecture
+
+Built with Clean Architecture principles using BLoC pattern for state management.
+
+**Key packages:**
+- flutter_bloc - State management
+- get_it - Dependency injection
+- shared_preferences - Local storage
+- dartz - Functional programming
